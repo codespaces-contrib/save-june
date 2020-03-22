@@ -23,3 +23,14 @@ body {
     font-size: 18px;
     white-space: pre-wrap;
 }
+
+@media only screen and (max-width: 600px) {
+    .june-images {
+        max-width: 340px;
+        max-height: 340px;
+    }
+
+    .haikus {
+        font-size: 22px;
+    }
+}
