@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>June Website</title>
+    <link href="/css/main.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <h1>Haikus for June</h1>
+    <div>
+      <% for(var i=0; i < haikus.length; i++) { %>
+        <img
+          class="june-images"
+          src="images/<%= haikus[i].image %>" />
+        <div 
+          class="haiku-containers">
+          <p 
+            class="haikus"
+          ><%- haikus[i].text %></p>
+        </div>
+      <% } %>
+    </div>
+</html>
