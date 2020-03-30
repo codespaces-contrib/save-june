@@ -7,6 +7,10 @@
     <meta property="og:title" content="Haikus for June">
     <meta property="og:description" content="Some of the best haikus you'll ever read about our rescue dog June">
     <meta property="og:image" content="/images/sunlight.jpg">
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
   </head>
   <body>
     <h1>Haikus for June</h1>
@@ -19,8 +23,28 @@
           class="haiku-containers">
           <p 
             class="haikus"
-          ><%- haikus[i].text %></p>
+          ><%- haikus[i].haiku %></p>
+          <a
+            type="button" 
+            id="<%= haikus[i].id %>"
+            class="heart"
+          >❤️
+            <span 
+              class="heart-value"
+            ><%- haikus[i].hearts %></span>
+          </a>
         </div>
       <% } %>
     </div>
+  </body>
+  <script>
+     $(function(){
+        $(".heart").click(function (e) {
+          let countElement = $(this).children('.heart-value');
+          countElement.html(parseInt(countElement.html(), 10)+1)
+          $(this).addClass('clicked');
+          $.post('/heart', {id: e.currentTarget.id});
+        });
+      });
+  </script>
 </html>

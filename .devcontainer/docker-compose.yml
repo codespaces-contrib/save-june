@@ -1,0 +1,27 @@
+# docker-compose.yml
+version: "3"
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    depends_on:
+      - postgres
+    env_file: ./.env
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    volumes:
+      - ..:/workspace:cached
+    working_dir: /workspace
+    command: npm run dev
+
+  postgres:
+    image: postgres:10.4
+    ports:
+      - "35432:5432"
+    env_file: ./.env
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql

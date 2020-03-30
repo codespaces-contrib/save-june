@@ -16,12 +16,28 @@ body {
 }
 
 .haiku-containers {
-    padding: 10px 0px 20px 0px;
+    padding: 10px 0px 30px 0px;
 }
 
 .haikus {
     font-size: 18px;
+    font-style: italic;
+    letter-spacing: .8px;
     white-space: pre-wrap;
+
+}
+
+.heart {
+    background-color:rgba(109, 102, 102, 0.4);
+    border: 2px solid rgba(109,102,102);
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+.clicked {
+    background-color: rgba(33, 150, 243, .7);
+    border: 2px solid rgba(33, 150, 243);
 }
 
 @media only screen and (max-width: 600px) {
