@@ -9,12 +9,12 @@ const pool = new Pool({
   user: process.env.POSTGRES_USER,
   database: process.env.POSTGRES_DB,
   password: process.env.POSTGRES_PASSWORD,
-  host: process.env.HOST,
+  host: 'db',
   port: 5432
 });
 
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended: true}));
 app.use(express.static('public'))
 app.set('view engine', 'ejs');
 
@@ -31,3 +31,4 @@ app.post('/heart', (req, res) => {
 });
 
 app.listen(port);
+console.log('Server running on','https://localhost:3000')
