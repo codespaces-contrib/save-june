@@ -32,5 +32,5 @@ app.post("/heart", (req, res) => {
 });
 
 app.listen(port, () =>
-  console.log(`🚀 Server is now running on: http://localhost:${port}`)
+  console.log(`🚀  Server is now running on: http://localhost:${port}`)
 );
