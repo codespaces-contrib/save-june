@@ -31,9 +31,9 @@ So now that we've seen the bug, the question is: <ins>how do you fix it!</ins> T
 
 - **Dotfiles:** Check out the terminal to see your dotfiles applied. If you're using the sample one, then check out the `PS1` prompt, and run `cls` and/or `git l` (these are custom aliases!).
 
-- **Debugging:** Set a breakpoint in the server code (`src/index.js`) and press `F5` to start a debugging session. You may be able to inspect some state that helps point at the problem.
-
 - **Live reload:** Once you've run the app, try changing code and saving it. The web app should automatically reload! For example, edit the body `<h1>` element in `views/index.ejs` and watch the header update once you hit `cmd+s` 🔥
+
+- **Debugging:** Set a breakpoint in the server code (`src/index.js`) and press `F5` to start a debugging session. You may be able to inspect some state that helps point at the problem.
 
 - **Extensions:** Install an extension or two in order to customize your environment. Some fun ideas: [Bracket Pair Colorizer](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2), [Indent Rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)
 
