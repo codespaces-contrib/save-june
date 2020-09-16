@@ -43,6 +43,6 @@ So now that we've seen the bug, the question is: <ins>how do you fix it!</ins> T
 
 ---
 
-If you made it this far, that means that you helped <ins>save June</ins>! Go ahead and pat yourself on the back, and close this issue. You just moved your development environment to the cloud, and that makes you pretty darn awesome 😎
+If you made it this far, that means that you helped <ins>save June</ins>! Go ahead and pat yourself on the back, and take a coffee break. You just moved your development environment to the cloud, and that makes you pretty darn awesome 😎
 
 <img width="500px" src="https://user-images.githubusercontent.com/116461/93296814-db0d4a80-f7a4-11ea-9bb5-5cd44b7eb39c.png" />
