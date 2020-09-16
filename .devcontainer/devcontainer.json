@@ -2,25 +2,19 @@
   "name": "Haikus for june",
   "workspaceFolder": "/workspace",
 
-  // Defines the configuration for this repo
   "dockerComposeFile": "docker-compose.yml",
   "service": "web",
 
-  // Comment out the next line to run as root instead.
   "remoteUser": "node",
 
   "runServices": [],
 
-  // Use 'settings' to set *default* container specific settings.json values on container create.
-  // You can edit these settings after create using File > Preferences > Settings > Remote.
   "settings": {
     "terminal.integrated.shell.linux": "/bin/bash"
   },
 
-  // Specifies a command that should be run after the container has been created.
   "postCreateCommand": "npm install",
 
-  // Add the IDs of extensions you want installed when the container is created in the array below.
   "extensions": ["esbenp.prettier-vscode"],
 
   "forwardPorts": [3000]
