@@ -10,7 +10,7 @@ We really don't want to post-pone our launch, and so we need to get this working
 
 Help save June. To do this, you're going to need to use Codespaces in order to figure out the source of this bug, fix it, and then send a PR back to this repo. All without doing a single ounce of setup!
 
-> **There's No Place Like \$HOME:** Don't forget to setup your `dotfiles` repo, so that your cloud-powered adventures feels like home. If you want a cool one to try out, then fork [this repo](https://github.com/lostintangent/dotfiles) before moving on.
+> **There's No Place Like \$HOME:** Don't forget to setup your `dotfiles` repo, so that your cloud-powered adventures feel ergonomic and immediately familiar. If you want a cool one to try out, then fork [this repo](https://github.com/lostintangent/dotfiles) before moving on.
 
 Alright, now where were we? To get your investigation started, try the following steps in order to repro the bug:
 
