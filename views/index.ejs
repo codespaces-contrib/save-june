@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Haikus for June</title>
+    <title>Haikus for June---</title>
     <link href="/css/main.css" rel="stylesheet" type="text/css" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:title" content="Haikus for June" />
@@ -42,8 +42,6 @@
       });
     });
 
-    const url = `wss://${location.host}`;
-    const socket = io();
-    socket.on("disconnect", () => location.reload());
+    io().on("disconnect", () => location.reload());
   </script>
 </html>

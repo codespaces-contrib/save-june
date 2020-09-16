@@ -5,6 +5,7 @@
   "private": true,
   "license": "MIT",
   "author": "Microsoft",
+  "main": "src/index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon -q"
@@ -18,10 +19,6 @@
     "socket.io": "^2.3.0"
   },
   "nodemonConfig": {
-    "ext": "js,ejs",
-    "events": {
-      "restart": "npx kill-port 3000"
-    },
-    "delay": "1500"
+    "ext": "js,ejs"
   }
 }
