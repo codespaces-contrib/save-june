@@ -31,6 +31,7 @@
       <% } %>
     </div>
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/socket.io-client@2.3.0/dist/socket.io.slim.js"></script>
   <script>
     $(function () {
       $(".heart").click(function (e) {
@@ -40,5 +41,9 @@
         $.post("/heart", { id: e.currentTarget.id });
       });
     });
+
+    const url = `wss://${location.host}`;
+    const socket = io();
+    socket.on("disconnect", () => location.reload());
   </script>
 </html>
