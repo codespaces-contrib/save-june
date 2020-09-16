@@ -17,7 +17,7 @@ Alright, now where were we? To get your investigation started, try the following
 **Repro steps**:
 
 1. Open the project in a Codespace 👍
-1. Spin up the app via `npm run dev` 💻
+1. Spin up the app via `npm run dev` 💻 If you setup a `dotfiles` repo, you should see your terminal setup fully intact. If you're using the sample one, then check out the awesome  `PS1` prompt, and try `cls` and/or `git l` (these are custom aliases!).
 1. Launch the app by `cmd+clicking` the localhost URL that you see in the terminal output 🚀
 1. Try to click the heart button for a photo, and note the number of hearts that it now has ❤️
 1. Refresh the browser 🌐
@@ -28,8 +28,6 @@ Alright, now where were we? To get your investigation started, try the following
 ---
 
 So now that we've seen the bug, the question is: <ins>how do you fix it!</ins> To guide you on your journey, and also, make things more enjoyable, here are some interesting things that might be worth trying:
-
-- **Dotfiles:** Check out the terminal to see your dotfiles applied. If you're using the sample one, then check out the `PS1` prompt, and run `cls` and/or `git l` (these are custom aliases!).
 
 - **Live reload:** Once you've run the app, try changing code and saving it. The web app should automatically reload! For example, edit the `<title>` or `<h1>` element in `views/index.ejs` and watch the header update once you hit `cmd+s` 🔥
 
