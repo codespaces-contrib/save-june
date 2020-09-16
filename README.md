@@ -1,4 +1,4 @@
-# Operation "Save June": A GitHub Codespaces Adventure
+# Save June: A GitHub Codespaces Adventure
 
 Help! We're about to launch our brand new dog-themed haiku app ("Haikus for June"), but it appears to be...broken. Users are supposed to be able to "heart" photos of June (because she's so cute!), but that gesture no longer seems to be persisted in the database 🤔
 
