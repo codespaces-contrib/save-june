@@ -1,16 +1,18 @@
 # Operation "Save June": A GitHub Codespaces Adventure
 
-Help! We're about to launch our brand new dog-themed haiku app ("Haikus for June"), but it appears to be...broken. Users are supposed to be able to "heart" photos of June, but that gesture no longer seems to be persisted in the database 🤔
+Help! We're about to launch our brand new dog-themed haiku app ("Haikus for June"), but it appears to be...broken. Users are supposed to be able to "heart" photos of June (because she's so cute!), but that gesture no longer seems to be persisted in the database 🤔
 
-We really don't want to post-pone our launch, and so we need to get this working on-the-quick 🏃
+We really don't want to post-pone our launch, and so we need to get this working on-the-quick. Codespaces to the rescue! 🦸
 
 <img width="500px" src="https://user-images.githubusercontent.com/116461/93283254-02ecb600-f785-11ea-84a9-83832ed1efc8.png" />
 
 ## 🕵️ Your Mission (Should you choose to accept it...)
 
-Use Codespaces in order to figure out the source of this issue, resolve it and then send a PR back to this repo. Try the following repro steps to get you started:
+Help save June. To do this, you're going to need to use Codespaces in order to figure out the source of this bug, fix it, and then send a PR back to this repo. All without doing a single ounce of setup!
 
-> **Note:** Before you get started, make sure you have a `dotfiles` repo fully setup. If you want a cool one to try out, then fork [this repo](https://github.com/lostintangent/dotfiles).
+> **There's No Place Like \$HOME:** Don't forget to setup your `dotfiles` repo, so that your cloud-powered adventures feels like home. If you want a cool one to try out, then fork [this repo](https://github.com/lostintangent/dotfiles) before moving on.
+
+Alright, no where were we? To get your investigation started, try the following steps in order to repro the bug:
 
 **Repro steps**:
 
@@ -25,7 +27,7 @@ Use Codespaces in order to figure out the source of this issue, resolve it and t
 
 ---
 
-So the question is: <ins>how do you fix it!</ins> To guide you on your journey, and also, make things more enjoyable, here are some interesting things that might be worth trying:
+So now that we've seen the bug, the question is: <ins>how do you fix it!</ins> To guide you on your journey, and also, make things more enjoyable, here are some interesting things that might be worth trying:
 
 - **Dotfiles:** Check out the terminal to see your dotfiles applied. If you're using the sample one, then check out the `PS1` prompt, and run `cls` and/or `git l` (these are custom aliases!).
 
