@@ -12,7 +12,7 @@ Help save June. To do this, you're going to need to use Codespaces in order to f
 
 > **There's No Place Like \$HOME:** Don't forget to setup your `dotfiles` repo, so that your cloud-powered adventures feels like home. If you want a cool one to try out, then fork [this repo](https://github.com/lostintangent/dotfiles) before moving on.
 
-Alright, no where were we? To get your investigation started, try the following steps in order to repro the bug:
+Alright, now where were we? To get your investigation started, try the following steps in order to repro the bug:
 
 **Repro steps**:
 
@@ -33,7 +33,7 @@ So now that we've seen the bug, the question is: <ins>how do you fix it!</ins> T
 
 - **Live reload:** Once you've run the app, try changing code and saving it. The web app should automatically reload! For example, edit the body `<h1>` element in `views/index.ejs` and watch the header update once you hit `cmd+s` 🔥
 
-- **Debugging:** Set a breakpoint in the server code (`src/index.js`) and press `F5` to start a debugging session. You may be able to inspect some state that helps point at the problem.
+- **Debugging:** Set a breakpoint in the server code (`src/index.js`) and press `F5` to start a debugging session. You may be able to inspect some state that helps point at the problem. <details><summary>Hint</summary>Set a breakpoint on 
 
 - **Extensions:** Install an extension or two in order to customize your environment. Some fun ideas: [Bracket Pair Colorizer](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2), [Indent Rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)
 
