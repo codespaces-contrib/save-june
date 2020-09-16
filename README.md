@@ -17,7 +17,7 @@ Alright, now where were we? To get your investigation started, try the following
 **Repro steps**:
 
 1. Open the project in a Codespace 👍
-1. Open a terminal, which is your window into a full-blown cloud environment. If you setup a `dotfiles` repo, you should see your terminal setup fully intact. If you're using the sample one, then check out the awesome  `PS1` prompt, and try `git whoami` and/or `cls` (these are custom aliases!).
+1. Open a terminal, which is your window into a full-blown cloud environment. If you setup a `dotfiles` repo, you should see your terminal setup fully intact. If you're using the sample one, then check out the awesome `PS1` prompt and/or try running `cls` (that's a custom alias!).
 1. Spin up the haiku app by running `npm run dev` 💻 
 1. Launch the app by `cmd+clicking` the localhost URL that you see in the terminal output 🚀
 1. Try to click the heart button for a photo, and note the number of hearts that it now has ❤️
