@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
 app.post("/heart", (req, res) => {
   db.query(
     "UPDATE haikus SET hearts = hearts + 1 WHERE id = $1",
-    [req.body.idz],
+    [req.body.id],
     () => res.send("Success")
   );
 });
