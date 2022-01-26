@@ -7,7 +7,7 @@
   "author": "Microsoft",
   "main": "src/index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node src/index.js",
     "dev": "nodemon -q"
   },
   "dependencies": {
