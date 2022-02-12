@@ -10,6 +10,9 @@
     "start": "node src/index.js",
     "dev": "nodemon -q"
   },
+  "engines": {
+    "node": "16.14.0"
+  },
   "dependencies": {
     "ejs": "^3.0.1",
     "express": "^4.17.1",
