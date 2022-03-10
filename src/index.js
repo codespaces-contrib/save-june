@@ -1,8 +1,9 @@
 const { createDb } = require("./db");
 const { createServer } = require("./server");
 
+(async function init() {
 const [app, server] = createServer();
-const db = createDb();
+const db = await createDb();
 
 const port = process.env.PORT || 3000;
 
@@ -23,3 +24,4 @@ app.post("/heart", (req, res) => {
 server.listen(port, () =>
   console.log(`🚀  Server is now running on: http://localhost:${port}`)
 );
+})()
