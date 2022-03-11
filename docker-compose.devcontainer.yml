@@ -51,9 +51,6 @@ services:
         "8080":
           label: Worker
           onAutoForward: notify
-        "db:5432":
-          label: Database
-          onAutoForward: silent
       features:
         common:
           username: worker
