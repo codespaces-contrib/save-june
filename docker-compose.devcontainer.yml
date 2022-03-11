@@ -8,7 +8,7 @@ services:
     build:
       context: web
       dockerfile: Dockerfile
-      target: devcontainer
+      target: build-base
     volumes:
       - .:/workspace
     command: sleep infinity
@@ -18,7 +18,7 @@ services:
     build:
       context: worker
       dockerfile: Dockerfile
-      target: devcontainer
+      target: base
     volumes:
       - .:/workspace
     command: sleep infinity

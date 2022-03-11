@@ -19,19 +19,6 @@ RUN apt-get update \
     libyaml-dev make patch unzip xz-utils zlib1g-dev jq python3-minimal \
     && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
-#  ******* Dev container image  *******
-FROM build-base as devcontainer
-RUN apt-get update \
-    # 👇 Adds ~50 common and convienence packages (e.g. htop) and quality of life improvments (e.g. Oh My Zsh!)
-    && bash -c "$(curl -fsSL "https://raw.githubusercontent.com/microsoft/vscode-dev-containers/main/script-library/common-debian.sh")" -- true web 1000 1000 false true true \
-    # 👇 Install postgresql client
-    && . /etc/os-release \
-    && curl -sSLf https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /usr/share/keyrings/postgresql.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt ${VERSION_CODENAME}-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-    && apt-get update \
-    && apt-get install -y postgresql-client \
-    && apt-get clean -y && rm -rf /var/lib/apt/lists/*
-
 #  ******* Final production image  *******
 
 # 👇 Use a temp image to mount the code during image build (only), build and then put result in /app

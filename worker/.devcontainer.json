@@ -8,26 +8,23 @@
     "service": "worker",
     "runServices": ["worker", "db"],
     "remoteUser": "worker",
-    "settings": {
-        "go.toolsManagement.checkForUpdates": "local",
-        "go.useLanguageServer": true,
-        "go.gopath": "/go",
-        "go.goroot": "/usr/local/go"
-    },
-    "extensions": [
-        "golang.Go"
-    ],
     "portsAttributes": {
         "8080": {
             "label": "Worker",
             "onAutoForward": "notify"
         }
     },
-    "postCreateCommand": "go get"
-    // 👇 Needs to be placed in docker-compose.yml ☹️
-    // "runArgs": [
-    //    "--cap-add=SYS_PTRACE",
-    //    "--security-opt",
-    //    "seccomp=unconfined"
-    //]
+    "postCreateCommand": "go get",
+    "features": {
+        "common": {
+            "username": "web",
+            "upgradePackages": false,
+            "nonFreePackages": true
+        },
+        "chuxel/devcontainer-features/postgres": {
+            "version": "latest",
+            "clientOnly": true
+        },
+        "golang": "1.17.7"
+    }
 }
