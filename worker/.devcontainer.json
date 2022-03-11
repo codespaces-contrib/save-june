@@ -17,7 +17,7 @@
     "postCreateCommand": "go get",
     "features": {
         "common": {
-            "username": "web",
+            "username": "worker",
             "upgradePackages": false,
             "nonFreePackages": true
         },
