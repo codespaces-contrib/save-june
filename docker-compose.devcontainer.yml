@@ -47,7 +47,7 @@ services:
     x-devcontainer:
       post_create_command: go get
       remote_user: worker
-      portsAttributes:
+      ports_attributes:
         "8080":
           label: Worker
           on_auto_forward: notify
