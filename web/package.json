@@ -1,6 +1,6 @@
 {
-  "name": "app-service-hello-world",
-  "description": "Simple Hello World Node.js sample for Azure App Service",
+  "name": "hello-june",
+  "description": "Hello June Web App",
   "version": "0.0.1",
   "private": true,
   "license": "MIT",
@@ -20,6 +20,9 @@
     "nodemon": "^2.0.2",
     "pg": "^7.18.2",
     "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0"
   },
   "nodemonConfig": {
     "ext": "js,ejs"
