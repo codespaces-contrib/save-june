@@ -15,11 +15,6 @@ services:
     # Embedded devcontainer metadata
     x-devcontainer:
       postCreateCommand: npm install
-      remoteUser: web
-      portsAttributes:
-        "3000":
-          label: Web Application
-          onAutoForward: notify
       features:
         common:
           username: web
@@ -46,11 +41,6 @@ services:
     # Embedded devcontainer metadata
     x-devcontainer:
       postCreateCommand: go get
-      remoteUser: worker
-      portsAttributes:
-        "8080":
-          label: Worker
-          onAutoForward: notify
       features:
         common:
           username: worker

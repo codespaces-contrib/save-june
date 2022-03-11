@@ -2,6 +2,10 @@ FROM debian:bullseye as base
 # 👇 Create non-root user called "worker" we will use when running the real app
 RUN groupadd --gid 1000 worker && useradd -s /bin/bash --uid 1000 --gid worker -m worker
 
+# 👇 Embedded devcontainer.json properties as labels - these are also automatically added to the image if pre-built with the devcontainer CLI
+LABEL "com.microsoft.devcontainer.remoteUser": "worker"
+LABEL "com.microsoft.devcontainer.portsAttributes": "{ \"8080\": { \"label\": \"Worker\", \"onAutoForward\": \"notify\" }"
+
 #  ******* Final production image  *******
 
 # 👇 Use a temp image to mount the code during image build (only), build and then put result in /service

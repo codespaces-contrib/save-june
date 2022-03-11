@@ -8,6 +8,11 @@ RUN apt-get update \
     # 👇 Create non-root user called "web" we will use when running the real app
     && groupadd --gid 1000 web && useradd -s /bin/bash --uid 1000 --gid web -m web
 
+# 👇 Embedded devcontainer.json properties as labels - these are also automatically added to the image if pre-built with the devcontainer CLI
+LABEL "com.microsoft.devcontainer.remoteUser": "web"
+LABEL "com.microsoft.devcontainer.portsAttributes": "{ \"3000\": { \"label\": \"Web Application\", \"onAutoForward\": \"notify\" }"
+
+
 #  ******* Build image  *******
 FROM base as build-base
 RUN apt-get update \
