@@ -20,7 +20,9 @@ ENV PATH="${PATH}:${GOROOT}/bin"
 RUN curl -fsSL -o /tmp/go.tar.gz "https://golang.org/dl/go1.17.7.linux-$(dpkg --print-architecture).tar.gz" \
     && mkdir -p "${GOROOT}" \
     && tar -C "${GOROOT}" -xzf /tmp/go.tar.gz --strip-components=1 \
-    && rm -f /tmp/go.tar.gz
+    && rm -f /tmp/go.tar.gz \
+    && mkdir -p /go \
+    && chown worker:worker /go
 
 #  ******* Dev container image  *******
 FROM build-base as devcontainer

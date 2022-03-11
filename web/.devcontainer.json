@@ -6,6 +6,7 @@
         "../docker-compose.devcontainer.yml"
     ],
     "service": "web",
+    "runServices": ["web", "db"],
     "remoteUser": "web",
     "extensions": [
         "dbaeumer.vscode-eslint",

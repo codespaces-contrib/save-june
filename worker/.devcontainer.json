@@ -6,6 +6,7 @@
         "../docker-compose.devcontainer.yml"
     ],
     "service": "worker",
+    "runServices": ["worker", "db"],
     "remoteUser": "worker",
     "settings": {
         "go.toolsManagement.checkForUpdates": "local",

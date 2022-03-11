@@ -7,13 +7,13 @@ services:
     image: save-june-web
     env_file: ./.env
     depends_on:
-        - db
+      - db
 
   worker:
     image: save-june-worker
     env_file: ./.env
     depends_on:
-        - db
+      - db
 
   db:
     image: postgres:14.1
