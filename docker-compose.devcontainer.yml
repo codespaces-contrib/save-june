@@ -22,6 +22,11 @@ services:
     volumes:
       - .:/workspace
     command: sleep infinity
+    # 👇 Need to know to add these by hand ☹️
+    cap_add:
+      - SYS_PTRACE"
+    security_opt:
+      seccomp:unconfined
 
   db:
     # We could also add a volume mount for the data like production.
