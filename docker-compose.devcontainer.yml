@@ -12,6 +12,27 @@ services:
     volumes:
       - .:/workspace
     command: sleep infinity
+    # Embedded devcontainer metadata
+    x-devcontainer:
+      postCreateCommand: npm install
+      remoteUser: web
+      portsAttributes:
+        "3000":
+          label: Web Application
+          onAutoForward: notify
+      features:
+        common:
+          username: web
+          upgradePackages: false
+          nonFreePackages: true
+        chuxel/devcontainer-features/postgres:
+          version: latest
+          clientOnly: true
+      tools:
+        vscode:
+          extensions:
+            - dbaeumer.vscode-eslint
+            - esbenp.prettier-vscode
 
   worker:
     image: save-june-worker-devcontainer
@@ -22,6 +43,27 @@ services:
     volumes:
       - .:/workspace
     command: sleep infinity
+    # Embedded devcontainer metadata
+    x-devcontainer:
+      postCreateCommand: go get
+      remoteUser: worker
+      portsAttributes:
+        "8080":
+          label: Worker
+          onAutoForward: notify
+        "db:5432":
+          label: Database
+          onAutoForward: silent
+      features:
+        common:
+          username: worker
+          upgradePackages: false
+          nonFreePackages: true
+        chuxel/devcontainer-features/postgres:
+          version: latest
+          clientOnly: true
+        golang:
+          version: "1.17.7"
 
   db:
     # We could also add a volume mount for the data like production.
@@ -30,6 +72,14 @@ services:
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
+    # Embedded devcontainer metadata
+    x-devcontainer:
+      forwardPorts: 
+        - db:5432
+      portsAttributes:
+        "5432":
+          label: Database
+          onAutoForward: silent
 
 volumes:
   save-june-postgres-logs:
