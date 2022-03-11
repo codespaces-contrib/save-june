@@ -5,7 +5,7 @@ exports.createDbPool = async () => {
     user: process.env.POSTGRES_USER || "postgres",
     database: process.env.POSTGRES_DB || "postgres",
     password: process.env.POSTGRES_PASSWORD || "postgres",
-    host: process.env.POSTGRES_DB || "localhost",
+    host: process.env.POSTGRES_HOST || "localhost",
     port: process.env.POSTGRES_PORT || 5432,
     connectionTimeoutMillis: 10000
   });
@@ -14,6 +14,8 @@ exports.createDbPool = async () => {
   const client = await pool.connect()
   console.log("Connected.");
   const time = await client.query('SELECT NOW()')
-  console.log("Verified. " + time);
+  console.log("Verified: " + time.rows[0].now);
   client.release();
+
+  return pool;
 };
