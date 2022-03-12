@@ -1,0 +1,12 @@
+{
+  "name": "fake-it",
+  "version": "0.0.1",
+  "description": "",
+  "main": "fake-it.js",
+  "scripts": {},
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "jsonc": "^2.0.0"
+  }
+}
