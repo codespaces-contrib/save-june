@@ -14,12 +14,19 @@ services:
     command: sleep infinity
     # Embedded devcontainer metadata
     x-devcontainer:
-      post_create_command: npm install
+      parent_compose_files:
+        - docker-compose.yml
+      workspace_folder: /workspace/web
       remote_user: web
+      forward_ports: 
+        - db:5432
       ports_attributes:
         "3000":
           label: Web Application
           on_auto_forward: notify
+        "5432":
+          label: Database
+          on_auto_forward: silent
       features:
         common:
           username: web
@@ -33,6 +40,7 @@ services:
           extensions:
             - dbaeumer.vscode-eslint
             - esbenp.prettier-vscode
+      post_create_command: npm install
 
   worker:
     image: save-june-worker-devcontainer
@@ -45,7 +53,9 @@ services:
     command: sleep infinity
     # Embedded devcontainer metadata
     x-devcontainer:
-      post_create_command: go get
+      parent_compose_files:
+        - docker-compose.yml
+      workspace_folder: /workspace/worker
       remote_user: worker
       ports_attributes:
         "8080":
@@ -61,6 +71,7 @@ services:
           client_only: true
         golang:
           version: "1.17.7"
+      post_create_command: go get
 
   db:
     # We could also add a volume mount for the data like production.
@@ -68,15 +79,6 @@ services:
     # each time the postgres container is created.
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-
-    # Embedded devcontainer metadata
-    x-devcontainer:
-      forward_ports: 
-        - db:5432
-      ports_attributes:
-        "5432":
-          label: Database
-          on_auto_forward: silent
 
 volumes:
   save-june-postgres-logs:
