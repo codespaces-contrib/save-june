@@ -8,7 +8,7 @@ To try it out:
 2. Open the `web` folder in a container using the Remote - Containers extension.
 3. Open a new window, and then open the `worker` folder in a container using the Remote - Containers extension.
 
-Each window will have contents specifically for working with that part of the application while sharing a common database.
+Each window will have contents specifically for working with that part of the application while sharing a common database. While this model uses Docker Compose, the general approach would apply to other orchestrator formats that may be supported over time.
 
 ## How the dev container setup works
 
@@ -101,6 +101,8 @@ There are several challenges with this model. In particular:
     - Codespaces also does not allow the workspace mount location to vary, so what is set in the docker-compose.yml file is ignored, which is confusing.
 
 1. A related but less severe problem is that there is no way to open both of these containers in the same VS Code window. (E.g. this could be modeled after multi-root workspaces which provides some of the UX hooks needed to do it).
+
+1. There's no automation around adding any content in this repository beyond VS Code's built in extension recommendations today.
 
 ----
 
