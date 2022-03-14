@@ -1,3 +1,101 @@
+# Current state + features example
+
+Like the [current state](https://github.com/codespaces-contrib/save-june/tree/current-state) example, this version of this repository includes two multi-stage Dockerfiles and two .devcontainer.json files that, when combined with Docker Compose, enables multi-container development. 
+
+This variation simplifies the required setup by taking advantage of the current "dev container features" concept.
+
+As with the current state branch, to try it out:
+
+1. Clone the repository to your local machine and switch to this branch.  
+2. Open the `web` folder in a container using the Remote - Containers extension.
+3. Open a new window, and then open the `worker` folder in a container using the Remote - Containers extension.
+
+Each window will have contents specifically for working with that part of the application while sharing a common database. While this model uses Docker Compose, the general approach would apply to other orchestrator formats that may be supported over time.
+
+## How the dev container setup works
+
+The basics here is the same as [current state](https://github.com/codespaces-contrib/save-june/tree/current-state#how-the-dev-container-setup-works), so this README will not go over them in detail, but rather what features solves.
+
+This example takes advantage of three features:
+1. The "common" feature
+1. The standard golang feature
+1. A feature that can install the postgres client - In this case a custom one in a different repo.
+
+The most dramatically simplified Dockerfile is the one for the [`worker` in Go](./worker/Dockerfile): 
+1. Since Go is not required at release, the entire `build-base` and `devcontainer` stages are removed.
+2. Instead the [`.devcontainer.json` file](./worker/.devcontainer.json) references featues and their related options:
+    ```json
+    "features": {
+        "common": {
+            "username": "worker",
+            "upgradePackages": false,
+            "nonFreePackages": true
+        },
+        "chuxel/devcontainer-features/postgres": {
+            "version": "latest",
+            "clientOnly": true
+        },
+        "golang": "1.17.7"
+    }
+    ```
+3. To generate the production image, the dev container CLI is used to generate the devcontainer image, which is then used to create the production image. Since it has a superset of what is needed during the build stage, it is just reused. [See the script here](./worker/build-prod-image.sh).
+
+The `docker-compose.devcontainer.yml` file is also simplified since this content **can be removed** as it is handled by the Go feature.
+
+```yaml
+# 👇 No longer needed
+cap_add:
+  - SYS_PTRACE
+security_opt:
+  seccomp:unconfined
+```
+
+The current state example included a specific property for `runServices` in devcontainer.json that was optional there, but **mandatory** here. Looking at the `worker` .devcontainer.json again:
+
+```json
+    "workspaceFolder": "/workspace/worker",
+    "dockerComposeFile": [
+        "../docker-compose.yml",
+        "../docker-compose.devcontainer.yml"
+    ],
+    "service": "worker",
+    "runServices": ["worker"],
+```
+
+Docker Compose will execute build steps right before the container is brought up. If this devcontainer.json did not include `"runServices": ["worker"]`, all services would be built and brought up at once. *The problem is that, this would mean only the features for the first container that is brought up would be applied.*  By setting `runServices`, we ensure that both the `web` and `worker` containers are brought up and built independently. 
+
+However, it's important to note that this is **brittle**, since a declared dependency between web and worker in docker-compose.yml would cause both of them to come up anyway.
+
+## Problems with this model
+
+There are several challenges with this model. In particular:
+
+1. This model is brittle due to the required configuration and that it can be broken by the addition of a dependency in the Docker Compose config.
+
+1. While this simplifies setup, there are not a lot of features today since we're still getting going on the concept.
+
+1. You end up referencing the features in devcontainer.json rather than in the Dockerfile or Docker Compose file like you would expect. 
+
+1. You would not get the same environment doing a straight `docker-compose up` as you would using the Remote - Containers to spin up the environment. This could in concept drive you to do it via a dev container CLI, but the public CLI provides no "exec" model to allow this.
+
+1. The required configuration for the dev container it still split between three files in three locations and you need to know exactly how the devcontainer.json properties work to tie them together. This makes automating this sample difficult and pushes devs to reading through docs to get going.
+
+1. If you pre-build the devcontainer image and store it in an image registry for performance, its devcontainer.json configuration is still completely disconnected. This makes it very easy to forget something and effectively adds a fourth thing to track in addition to the .devcontainer.json files and docker-compose.devcontainer.yml file.
+
+1. This still doesn't work in Codespaces today. Gaps:
+
+    - It neither supports opening folders in a location other than the repo root nor does it allow connecting multiple windows to different containers in the same Codespace.
+
+    - This takes advantage of being able to port forward a different domain to forward the database port (`forwardPorts: [ "db:5432" ]`) which Codespaces does not support. Changing the network type to host or a common network is required, which is not common in Docker Compose setups.
+
+    - Codespaces also does not allow the workspace mount location to vary, so what is set in the docker-compose.yml file is ignored, which is confusing.
+
+1. A related but less severe problem is that there is no way to open both of these containers in the same VS Code window. (E.g. this could be modeled after multi-root workspaces which provides some of the UX hooks needed to do it).
+
+1. There's no automation around adding any content in this repository beyond VS Code's built in extension recommendations today.
+
+----
+
 # Save June: A GitHub Codespaces Adventure
 
 Help! We're about to launch our brand new dog-themed haiku app ("Haikus for June"), but it appears to be...broken. Users are supposed to be able to "heart" photos of June (because she's so cute!), but that gesture no longer seems to be persisted in the database 🤔
