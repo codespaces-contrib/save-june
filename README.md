@@ -1,6 +1,6 @@
 # Current state example
 
-This version of this repository includes two multi-stage Dockerfiles and two .devcontainer.json files that can use them. This variation does **not** add any dev container features. The sample includes a way to generate a dev container, build, and production image from the same content.
+This version of this repository includes two multi-stage Dockerfiles and two .devcontainer.json files that, when combined with Docker Compose, enables multi-container development. This variation does **not** include any dev container features and serves as a baseline. However, the sample includes a way to generate a dev container, build, and production image from the same content.
 
 To try it out:
 
@@ -9,7 +9,6 @@ To try it out:
 3. Open a new window, and then open the `worker` folder in a container using the Remote - Containers extension.
 
 Each window will have contents specifically for working with that part of the application while sharing a common database.
-
 
 ## How the dev container setup works
 
