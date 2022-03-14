@@ -1,3 +1,110 @@
+# Current state example
+
+This version of this repository includes two multi-stage Dockerfiles and two .devcontainer.json files that can use them. This variation does **not** add any dev container features. The sample includes a way to generate a dev container, build, and production image from the same content.
+
+To try it out:
+
+1. Clone the repository to your local machine and switch to this branch.  
+2. Open the `web` folder in a container using the Remote - Containers extension.
+3. Open a new window, and then open the `worker` folder in a container using the Remote - Containers extension.
+
+Each window will have contents specifically for working with that part of the application while sharing a common database.
+
+
+## How the dev container setup works
+
+For the devcontainer / CI / production examples, this sample uses the Dockerfile not only for creating the image, but to build the production version of the application. See [here](./web/Dockerfile) and [here](./worker/Dockerfile).
+
+The key to this working as expected without bloating the image size can be found in the two production stages. The first uses the build image to build the application in a temporary layer. This is then thrown away and only the result of the build is copied into the final production image. In the [Go-based worker](./worker/Dockerfile), the Go tooling itself is excluded entirely from the production image since the output of the build is a binary.
+
+The `devcontainer` stage in each includes unqiue requirements for inner loop development in addition to a `build-base` stage that is used in generating the production image.
+
+There are three Docker Compose files in this project:
+1. `docker-compose.yml` - Contains common configuration across all environments.
+2. `docker-compose.prod.yml` - Contains production (or test) specific settings like publishing the applicaiton port.
+3. `docker-compose.devcontainer.yml` - The largest of the three, this includes content specific to the dev container environment.
+
+In this case, `docker-compose.devcontainer.yml` points to a specific stage (`target`) in the Dockerfile (or a pre-built image). This `devcontainer` stage extends the core `build-base` stage with tools needed to build the application to include other convenances and utilities. Specifically:
+
+1. A postgres CLI tool - not needed outside of a dev container
+2. Utilities needed for the inner loop for Go for the worker - e.g. gopls
+
+To start the dev containers, you would list two Docker Compose files:
+
+```
+ docker-compose up -f docker-compose.yml -f docker-compose.devcontainer.yml .
+ ```
+
+ While for the production version, you'd add the prod compose file instead:
+
+```
+ docker-compose up -f docker-compose.yml -f docker-compose.prod.yml .
+ ```
+
+This pattern and other properties can be found in the .devcontainer.json files under `web` and `worker`. For example for `web`:
+
+```json
+    "workspaceFolder": "/workspace/web",
+    "dockerComposeFile": [
+        "../docker-compose.yml",
+        "../docker-compose.devcontainer.yml"
+    ],
+    "service": "web",
+    "runServices": ["web"],
+```
+
+In this case, the source code was mounted to `/workspace` in `docker-compose.yml` so `git` functions, which is why the `workspaceFolder` is set to `/workspace/web`. The service's name is `web`, and when this dev container is started, only the web and db containers need to be started. 
+
+Technically, `runServices` is optional, but we'll use this to our advantage next. It tells Docker Compose that it only needs to start this service and its dependencies (like the `db` container) rather than all of them at once.
+
+The `worker` devcontainer.json then references a different service, but with the similar arguments.
+
+```json
+    "workspaceFolder": "/workspace/worker",
+    "dockerComposeFile": [
+        "../docker-compose.yml",
+        "../docker-compose.devcontainer.yml"
+    ],
+    "service": "worker",
+    "runServices": ["worker"],
+```
+
+## Problems with this model
+
+There are several challenges with this model. In particular:
+
+1. Knowing what to add into each stage of the multi-stage Dockerfiles can be difficult, and there's no built in way to reuse content across projects which leads to lots of cut-and-paste work.
+
+    - While it may be obvious once you have done it once, knowing how to setup these things can be confusing to those who have not scripted it before (e.g.g the shell is non-interactive) and are devs are often used to going through a tool like "brew" instead. (And adding brew to the image makes it large unfortunately, so you'd do it on a case-by-case basis.) 
+
+    - While centralized teams that know Dockerfiles will have experience with some of this, devs may want to add "one more thing" and not know how to do it - and some of these (like docker-in-docker) are deceptivley tricky.
+
+1. The required configuration for the dev container it split between three files in three locations and you need to know exactly how the devcontainer.json properties work to tie them together. This makes automating this sample difficult and pushes devs to reading through docs to get going.
+
+1. Some config that is development specific that you would expect to be able to set in devcontainer.json must be set in `docker-compose.devcontainer.yaml` in this case. Worse yet, these are very specific to this use case and would not be done in a production container that you'd normally find information on. For example, the following is required to get Go debugging to work, but isn't needed for anything else related to Go:
+
+    ```yaml
+    # 👇 Need to know to add these by hand ☹️
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      seccomp:unconfined
+    ```
+
+1. If you pre-build the devcontainer image and store it in an image registry for performance, its devcontainer.json configuration is completely disconnected. This makes it very easy to forget something and effectively adds a fourth thing to track in addition to the .devcontainer.json files and docker-compose.devcontainer.yml file.
+
+1. This doesn't work in Codespaces today. Gaps:
+
+    - It neither supports opening folders in a location other than the repo root nor does it allow connecting multiple windows to different containers in the same Codespace.
+
+    - This takes advantage of being able to port forward a different domain to forward the database port (`forwardPorts: [ "db:5432" ]`) which Codespaces does not support. Changing the network type to host or a common network is required, which is not common in Docker Compose setups.
+
+    - Codespaces also does not allow the workspace mount location to vary, so what is set in the docker-compose.yml file is ignored, which is confusing.
+
+1. A related but less severe problem is that there is no way to open both of these containers in the same VS Code window. (E.g. this could be modeled after multi-root workspaces which provides some of the UX hooks needed to do it).
+
+----
+
 # Save June: A GitHub Codespaces Adventure
 
 Help! We're about to launch our brand new dog-themed haiku app ("Haikus for June"), but it appears to be...broken. Users are supposed to be able to "heart" photos of June (because she's so cute!), but that gesture no longer seems to be persisted in the database 🤔
