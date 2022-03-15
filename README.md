@@ -17,7 +17,7 @@ The big advantage here is that it allows dropping of several properties and prov
 
 ## How the dev container setup works
 
-The basics here is the same as [monolitic devcontainer.json example](https://github.com/codespaces-contrib/save-june/tree/with-features-monorepo), so this README will not go over them in detail, but rather what this solves.
+The basics here is the same as [monolitic devcontainer.json example](https://github.com/codespaces-contrib/save-june/tree/with-features-monorepo), so this README will not go over them in detail, but rather what this branch adds.
 
 A key problem with the monolitic devcontainer.json example is that it started to feel like you were creating the exact same structure in both devcontainer.json and docker-compose.devcontainer.yml, and you needed to refer to shared keys to tie it all together. Furthermore, it was not immediately obvious looking at `docker-compose.devcontainer.yml` that there was additional configuration somewhere else tht was required to get it all to work together.
 
