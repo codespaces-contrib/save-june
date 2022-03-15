@@ -1,3 +1,76 @@
+# Monolitic devcontainer.json example
+
+Like the [current state + features](https://github.com/codespaces-contrib/save-june/tree/with-features) example, this version of this repository includes two multi-stage Dockerfiles and two .devcontainer.json files that, when combined with Docker Compose, enables multi-container development and takes advantage of the current "dev container features" concept.
+
+What it adds is the ability to centralize devcontainer.json config across the two services into one file to reduce the brittleness of the solution. This isn't supported by Remote - Containers today, but there's a script that mocks it up. 
+
+To try it out on macOS or Linux (no windows yet)
+
+1. Install Docker, VS Code, Remote - Containers, and Node.js
+1. Use the **Remote-Containers: Install devcontainer CLI** command
+1. Clone the repository to your local machine and switch to this branch.  
+1. Run `bash fake-it.sh` from the repository root.
+
+You'll see two windows pop up based on the consolidated .devcontainer.json in the repository root.
+
+This would be most applicable applications developed in monorepos, though you could have a "bootstrap" repository you use to set things up with the actual service code being in separate repository.
+
+## How the dev container setup works
+
+The basics here is the same as [current state + features](https://github.com/codespaces-contrib/save-june/tree/with-features#how-the-dev-container-setup-works), so this README will not go over them in detail, but rather what this solves.
+
+A key problem with the current state + features model is how brittle getting features to work would be. There is a `runServices` in devcontainer.json that was mandatory **mandatory**, and could break the moment you added a dependency between the `web` and `worker` services in `docker-compose.yml`.
+
+Instead, there is a single .devcontainer.json file in it with sections:
+
+```jsonc
+{
+    "onOpenConfigurations": ["web", "worker"],
+    "configurations" : {
+        "worker": {
+            // Config goes here
+        },
+        "web": {
+            // Config goes here        
+        }
+    }
+}
+```
+
+No matter what configuration is built, the contents of each configuration would be applied to the docker-compose file. As a result, you would never be able to start `worker` without the configuration for `web` being applied or vice versa. Dependencies therefore would not cause a problem.
+
+This model is also a bit more consistent with existing .devcontainer folders found at the top of the repository root, which helps with understanding what would happen.
+
+The `onOpenConfigurations` property (whether this is the right name) could then include the behavior of which of these services to connect to right away to avoid the number of steps required to open them separately.
+
+## Problems with this model
+
+There are several challenges with this model. In particular:
+
+1. As before, while this simplifies setup, there are not a lot of features today since we're still getting going on the concept.
+
+1. You end up referencing the features in devcontainer.json rather than in the Dockerfile or Docker Compose file like you would expect. 
+
+1. As before, you would not get the same environment doing a straight `docker-compose up` as you would using the Remote - Containers to spin up the environment. This could in concept drive you to do it via a dev container CLI, but the public CLI provides no "exec" model to allow this. But all of this would need to be addressed for this model to be adopted.
+
+1. The required configuration for the dev container it split between two files in and you need to know exactly how the devcontainer.json properties work to tie them together. This also becomes **even more odd** when you include multiple configurations that end up mirroring the Docker Compose file itself. This makes automating this sample difficult and pushes devs to reading through docs to get going.
+
+1. As before, if you pre-build the devcontainer image and store it in an image registry for performance, its devcontainer.json configuration is still completely disconnected. This makes it very easy to forget something and effectively adds a fourth thing to track in addition to the .devcontainer.json files and docker-compose.devcontainer.yml file.
+
+1. This still wouldn't work in Codespaces today even if the CLI/Remote - Containers supported. Recap of gaps:
+
+    - It neither supports opening folders in a location other than the repo root nor does it allow connecting multiple windows to different containers in the same Codespace.
+
+    - This takes advantage of being able to port forward a different domain to forward the database port (`forwardPorts: [ "db:5432" ]`) which Codespaces does not support. Changing the network type to host or a common network is required, which is not common in Docker Compose setups.
+
+    - Codespaces also does not allow the workspace mount location to vary, so what is set in the docker-compose.yml file is ignored, which is confusing.
+
+1. A related but less severe problem is that there is no way to open both of these containers in the same VS Code window. (E.g. this could be modeled after multi-root workspaces which provides some of the UX hooks needed to do it).
+
+1. There's no automation around adding any content in this repository beyond VS Code's built in extension recommendations today.
+
+----
+
 # Save June: A GitHub Codespaces Adventure
 
 Help! We're about to launch our brand new dog-themed haiku app ("Haikus for June"), but it appears to be...broken. Users are supposed to be able to "heart" photos of June (because she's so cute!), but that gesture no longer seems to be persisted in the database 🤔
