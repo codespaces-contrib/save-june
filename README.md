@@ -1,3 +1,101 @@
+# Embedded devcontainer.json properties example
+
+Like the [monolitic devcontainer.json example](https://github.com/codespaces-contrib/save-june/tree/with-features-monorepo) example, this version of this repository includes two multi-stage Dockerfiles and two .devcontainer.json files that, when combined with Docker Compose, enables multi-container development and takes advantage of the current "dev container features" concept.
+
+However, rather than trying to create a configuration in two separate files, it moves the needed devcontainer.json metadata into `docker-compose.devcontainer.yml` instead using the same properties translated to snake_case under an `x-devcontainer` property. Again, this is not supported by Remote - Containers or Codespaces, but there's a script to fake it.
+
+To try it out on macOS or Linux (no windows yet)
+
+1. Install Docker, VS Code, Remote - Containers, and Node.js
+1. Use the **Remote-Containers: Install devcontainer CLI** command
+1. Clone the repository to your local machine and switch to this branch.  
+1. Run `bash fake-it.sh` from the repository root.
+
+You'll see two windows pop up based on the consolidated .devcontainer.json in the repository root.
+
+The big advantage here is that it allows dropping of several properties and provides a one-stop-shop for all needed configuration.
+
+## How the dev container setup works
+
+The basics here is the same as [monolitic devcontainer.json example](https://github.com/codespaces-contrib/save-june/tree/with-features-monorepo), so this README will not go over them in detail, but rather what this solves.
+
+A key problem with the monolitic devcontainer.json example is that it started to feel like you were creating the exact same structure in both devcontainer.json and docker-compose.devcontainer.yml, and you needed to refer to shared keys to tie it all together. Furthermore, it was not immediately obvious looking at `docker-compose.devcontainer.yml` that there was additional configuration somewhere else tht was required to get it all to work together.
+
+By mirroring the same metadata in the right spot in the yml file itself, we can avoid that problem and cut down the number of needed properties.
+
+e.g. for the `web` service:
+```yaml
+services:
+  web:
+    image: save-june-web-devcontainer
+    build:
+      context: web
+      dockerfile: Dockerfile
+      target: build-base
+    volumes:
+      - .:/workspace
+    command: sleep infinity
+    # Embedded devcontainer metadata
+    x-devcontainer:
+      parent_compose_files:
+        - docker-compose.yml
+      workspace_folder: /workspace/web
+      remote_user: web
+      forward_ports: 
+        - db:5432
+      ports_attributes:
+        "3000":
+          label: Web Application
+          on_auto_forward: notify
+        "5432":
+          label: Database
+          on_auto_forward: silent
+      features:
+        common:
+          username: web
+          upgrade_packages: false
+          non_free_packages: true
+        chuxel/devcontainer-features/postgres:
+          version: latest
+          client_only: true
+      tools:
+        vscode:
+          extensions:
+            - dbaeumer.vscode-eslint
+            - esbenp.prettier-vscode
+      post_create_command: npm install
+```
+
+One glance at this file, and its clear that there are things here that would not be applied via the straight Docker CLI, and its immediatley obvious how it ties to the services defined in this file.  It also eliminates the need for both the `service`, `runServices` properties entirely.
+
+Finally, this includes a `parent_compose_files` property to emulate the behavior of having an list of compose files, but this technically wouldn't be strictly necessary. However, you would need to be able to specify the list of Compose files to use in this case - which could be the only remaining property in the devcontainer.json file as an alternative.
+
+## Problems with this model
+
+There are several challenges with this model. In particular:
+
+1. As before, while this simplifies setup, there are not a lot of features today since we're still getting going on the concept.
+
+1. You end up referencing the features in devcontainer.json rather than in the Dockerfile or Docker Compose file like you would expect. 
+
+1. As before, you would not get the same environment doing a straight `docker-compose up` as you would using the Remote - Containers to spin up the environment. This could in concept drive you to do it via a dev container CLI, but the public CLI provides no "exec" model to allow this. But all of this would need to be addressed for this model to be adopted, and its clearer here that this would be needed.
+
+1. As before, if you pre-build the devcontainer image and store it in an image registry for performance, its devcontainer.json configuration is still completely disconnected. This makes it very easy to forget something and effectively adds a fourth thing to track in addition to the .devcontainer.json files and docker-compose.devcontainer.yml file.
+
+1. This still wouldn't work in Codespaces today even if the CLI/Remote - Containers supported. Recap of gaps:
+
+    - It neither supports opening folders in a location other than the repo root nor does it allow connecting multiple windows to different containers in the same Codespace.
+
+    - This takes advantage of being able to port forward a different domain to forward the database port (`forwardPorts: [ "db:5432" ]`) which Codespaces does not support. Changing the network type to host or a common network is required, which is not common in Docker Compose setups.
+
+    - Codespaces also does not allow the workspace mount location to vary, so what is set in the docker-compose.yml file is ignored, which is confusing.
+
+1. A related but less severe problem is that there is no way to open both of these containers in the same VS Code window. (E.g. this could be modeled after multi-root workspaces which provides some of the UX hooks needed to do it).
+
+1. There's no automation around adding any content in this repository beyond VS Code's built in extension recommendations today.
+
+----
+
 # Save June: A GitHub Codespaces Adventure
 
 Help! We're about to launch our brand new dog-themed haiku app ("Haikus for June"), but it appears to be...broken. Users are supposed to be able to "heart" photos of June (because she's so cute!), but that gesture no longer seems to be persisted in the database 🤔
