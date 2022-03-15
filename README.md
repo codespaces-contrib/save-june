@@ -1,6 +1,6 @@
 # Embedded devcontainer.json properties example
 
-Like the [monolitic devcontainer.json example](https://github.com/codespaces-contrib/save-june/tree/with-features-monorepo) example, this version of this repository includes two multi-stage Dockerfiles and two .devcontainer.json files that, when combined with Docker Compose, enables multi-container development and takes advantage of the current "dev container features" concept.
+Like the [monolitic devcontainer.json example](https://github.com/codespaces-contrib/save-june/tree/with-features-monorepo) example, this version of this repository includes two multi-stage Dockerfiles  with a Docker Compose file with embedded devcontainer.json properties (included features) to enables multi-container development.
 
 However, rather than trying to create a configuration in two separate files, it moves the needed devcontainer.json metadata into `docker-compose.devcontainer.yml` instead using the same properties translated to snake_case under an `x-devcontainer` property. Again, this is not supported by Remote - Containers or Codespaces, but there's a script to fake it.
 
@@ -75,8 +75,6 @@ Finally, this includes a `parent_compose_files` property to emulate the behavior
 There are several challenges with this model. In particular:
 
 1. As before, while this simplifies setup, there are not a lot of features today since we're still getting going on the concept.
-
-1. You end up referencing the features in devcontainer.json rather than in the Dockerfile or Docker Compose file like you would expect. 
 
 1. As before, you would not get the same environment doing a straight `docker-compose up` as you would using the Remote - Containers to spin up the environment. This could in concept drive you to do it via a dev container CLI, but the public CLI provides no "exec" model to allow this. But all of this would need to be addressed for this model to be adopted, and its clearer here that this would be needed.
 
