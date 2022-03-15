@@ -26,7 +26,7 @@ services:
     cap_add:
       - SYS_PTRACE
     security_opt:
-      seccomp:unconfined
+      - seccomp:unconfined
 
   db:
     # We could also add a volume mount for the data like production.
