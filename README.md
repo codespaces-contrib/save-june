@@ -14,7 +14,7 @@ Each window will have contents specifically for working with that part of the ap
 
 ## How the dev container setup works
 
-The basics here is the same as [current state](https://github.com/codespaces-contrib/save-june/tree/current-state#how-the-dev-container-setup-works), so this README will not go over them in detail, but rather what features solves.
+The basics here is the same as [current state](https://github.com/codespaces-contrib/save-june/tree/current-state#how-the-dev-container-setup-works), so this README will not go over them in detail, but rather what "features" support solves.
 
 This example takes advantage of three features:
 1. The "common" feature
