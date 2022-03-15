@@ -1,6 +1,6 @@
 # Monolitic devcontainer.json example
 
-Like the [current state + features](https://github.com/codespaces-contrib/save-june/tree/with-features) example, this version of this repository includes two multi-stage Dockerfiles and two .devcontainer.json files that, when combined with Docker Compose, enables multi-container development and takes advantage of the current "dev container features" concept.
+Like the [current state + features](https://github.com/codespaces-contrib/save-june/tree/with-features) example, this version of this repository includes two multi-stage Dockerfiles, needed files Docker Compose, and takes advantage of the current "dev container features" concept to enable multi-container development.
 
 What it adds is the ability to centralize devcontainer.json config across the two services into one file to reduce the brittleness of the solution. This isn't supported by Remote - Containers today, but there's a script that mocks it up. 
 
@@ -17,7 +17,7 @@ This would be most applicable applications developed in monorepos, though you co
 
 ## How the dev container setup works
 
-The basics here is the same as [current state + features](https://github.com/codespaces-contrib/save-june/tree/with-features#how-the-dev-container-setup-works), so this README will not go over them in detail, but rather what this solves.
+The basics here is the same as [current state + features](https://github.com/codespaces-contrib/save-june/tree/with-features#how-the-dev-container-setup-works), so this README will not go over them in detail, but rather what this branch adds.
 
 A key problem with the current state + features model is how brittle getting features to work would be. There is a `runServices` in devcontainer.json that was mandatory **mandatory**, and could break the moment you added a dependency between the `web` and `worker` services in `docker-compose.yml`.
 
