@@ -1,3 +1,78 @@
+# Supporting devcontainer.json properties as lables
+
+Like the [embedded devcontainer.json properties example](https://github.com/codespaces-contrib/save-june/tree/embedded) example, this version of this repository includes two multi-stage Dockerfiles, a Docker Compose with devcontainer.json properties inside it, and takes advantage of the current "dev container features" concept.
+
+The added concept is to also allow devcontainer.json properties to be specified metadata labels in the Dockerfile or on the image itself.
+
+Unlike the others, there's no mock up for this model yet. 
+
+## How the dev container setup works
+
+The basics here is the same as [embedded devcontainer.json properties example](https://github.com/codespaces-contrib/save-june/tree/embedded), so this README will not go over them in detail, but rather what this solves.
+
+A remaining issue that still exists is that a number of devcontainer.json properties really tie to the image rather than anything else, and separating them actually creates problems.
+
+For example, the `remoteUser` property can contain the user VS Code should use to connect to the container regardless of what it is run as. This username can vary by image, so you have to remember to add it to devcontainer.json.
+
+This gets worse when you pre-build an image, particularly when features are in use. For the Go example, once the Go feature has been added to a pre-built container image, the addition of the ptrace capability should be applied in all cases. Today, you still have to reference the feature to ensure that kicks in - the same goes for all extensions.
+
+We can alter processing instead to look at the image to understand what devcontainer.json properties have already been applied. In the simple cases, this would allow you to just reference an image with no other content if the image was pre-built with devcontainer.json metadata.  
+
+In the Docker Compose case, it would allow less to be added into the `x-devcontainer` property. For other orchestrators, this could be the primary way of specifying the needed metadata in a common way.
+
+For example, in the web Dockerfile:
+```Dockerfile
+LABEL "com.microsoft.devcontainer.remoteUser": "web"
+LABEL "com.microsoft.devcontainer.portsAttributes": "{ \"3000\": { \"label\": \"Web Application\", \"onAutoForward\": \"notify\" }"
+```
+
+These two properties do not need to be included in the Docker Compose file, or in devcontainer.json if the image is referenced directly for this to happen.
+
+At this point, you could enable a workflow where you:
+
+1. Create a devcontainer.json for the metadata you want to add to any pre-built image. e.g. any of our `mcr.microsoft.com/vscode/devcontainer/...` images
+
+2. Pre-build and publish using the devcontainer CLI
+
+3. Any devcontainer.json file just would include the image property, and the same thing would work for Docker Compose.
+
+
+```json
+{
+    "image": "ghcr.io/yourorg/yourprebuiltimage"
+}
+```
+...or...
+```yaml
+services:
+   web:
+      image: ghcr.io/yourorg/yourprebuiltimage
+```
+
+This does not remove the need for devcontainer.json when you are not pre-building, but given this is a best practice, it helps significantly in simplifying use and reuse, forgetting to add configuration, and **should work with any orchestrator that can reference an image**.
+
+## Problems with this model
+
+There are a few remaining challenges with this model. In particular:
+
+1. As before, while this simplifies setup, there are not a lot of features today since we're still getting going on the concept.
+
+1. As before, you would not get the same environment doing a straight `docker-compose up` as you would using the Remote - Containers to spin up the environment. This could in concept drive you to do it via a dev container CLI, but the public CLI provides no "exec" model to allow this.
+
+1. This still wouldn't work in Codespaces today even if the CLI/Remote - Containers supported. Recap of gaps:
+
+    - It neither supports opening folders in a location other than the repo root nor does it allow connecting multiple windows to different containers in the same Codespace.
+
+    - This takes advantage of being able to port forward a different domain to forward the database port (`forwardPorts: [ "db:5432" ]`) which Codespaces does not support. Changing the network type to host or a common network is required, which is not common in Docker Compose setups.
+
+    - Codespaces also does not allow the workspace mount location to vary, so what is set in the docker-compose.yml file is ignored, which is confusing.
+
+1. A related but less severe problem is that there is no way to open both of these containers in the same VS Code window. (E.g. this could be modeled after multi-root workspaces which provides some of the UX hooks needed to do it).
+
+1. There's no automation around adding any content in this repository beyond VS Code's built in extension recommendations today.
+
+----
+
 # Save June: A GitHub Codespaces Adventure
 
 Help! We're about to launch our brand new dog-themed haiku app ("Haikus for June"), but it appears to be...broken. Users are supposed to be able to "heart" photos of June (because she's so cute!), but that gesture no longer seems to be persisted in the database 🤔
