@@ -23,11 +23,6 @@ services:
         chuxel/devcontainer-features/postgres:
           version: latest
           client_only: true
-      tools:
-        vscode:
-          extensions:
-            - dbaeumer.vscode-eslint
-            - esbenp.prettier-vscode
 
   worker:
     image: save-june-worker-devcontainer
@@ -62,7 +57,7 @@ services:
     # Embedded devcontainer metadata
     x-devcontainer:
       forward_ports: 
-        - db:5432
+        - 5432
       ports_attributes:
         "5432":
           label: Database

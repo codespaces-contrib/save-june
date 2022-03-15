@@ -11,7 +11,7 @@ RUN apt-get update \
 # 👇 Embedded devcontainer.json properties as labels - these are also automatically added to the image if pre-built with the devcontainer CLI
 LABEL "com.microsoft.devcontainer.remoteUser": "web"
 LABEL "com.microsoft.devcontainer.portsAttributes": "{ \"3000\": { \"label\": \"Web Application\", \"onAutoForward\": \"notify\" }"
-
+LABEL "com.microsoft.devcontainer.tools.vscode.extensions": "[dbaeumer.vscode-eslint,esbenp.prettier-vscode]"
 
 #  ******* Build image  *******
 FROM base as build-base
