@@ -8,7 +8,7 @@ Unlike the others, there's no mock up for this model yet.
 
 ## How the dev container setup works
 
-The basics here is the same as [embedded devcontainer.json properties example](https://github.com/codespaces-contrib/save-june/tree/embedded), so this README will not go over them in detail, but rather what this solves.
+The basics here is the same as [embedded devcontainer.json properties example](https://github.com/codespaces-contrib/save-june/tree/embedded), so this README will not go over them in detail, but rather what branch adds.
 
 A remaining issue that still exists is that a number of devcontainer.json properties really tie to the image rather than anything else, and separating them actually creates problems.
 
