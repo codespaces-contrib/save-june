@@ -10,7 +10,14 @@
   "runServices": [],
 
   "settings": {
-    "terminal.integrated.shell.linux": "/bin/bash"
+    
+    "terminal.integrated.profiles.linux": {
+      "bash": {
+        "path": "/bin/bash"
+      }
+    },
+    "terminal.integrated.defaultProfile.linux": "bash"
+        
   },
 
   "postCreateCommand": "npm install",
