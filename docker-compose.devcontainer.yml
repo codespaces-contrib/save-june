@@ -14,6 +14,8 @@ services:
     command: sleep infinity
     # Embedded devcontainer metadata
     x-devcontainer:
+      # Needed unless we keep an external file
+      # to list the sequence of compose files
       parent_compose_files:
         - docker-compose.yml
       workspace_folder: /workspace/web
@@ -35,7 +37,7 @@ services:
         chuxel/devcontainer-features/postgres:
           version: latest
           client_only: true
-      tools:
+      customizations:
         vscode:
           extensions:
             - dbaeumer.vscode-eslint
